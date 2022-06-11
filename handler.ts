@@ -7,7 +7,7 @@ export const hello = (event) => {
         input: event,
       },
       null,
-      2
+      2,
     ),
   };
 };
