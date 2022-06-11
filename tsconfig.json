@@ -1,0 +1,17 @@
+	
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "preserveConstEnums": true,
+    "strictNullChecks": true,
+    "module": "commonjs",
+    "sourceMap": true,
+    "target": "es6",
+    "outDir": "build",
+    "moduleResolution": "node",
+    "lib": ["es6","es2018", "es2019", "es2020"],
+    "rootDir": "./",
+  },
+  "exclude": ["node_modules"]
+}

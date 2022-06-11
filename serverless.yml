@@ -1,0 +1,18 @@
+org: quoc2110
+app: curd-serveless
+service: books
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  hello:
+    handler: handler.hello
+
+plugins:
+  - serverless-plugin-typescript 
+  - serverless-offline
+  - serverless-dynamodb-local
