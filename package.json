@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "local": "serverless offline",
-    "deploy": "serverless deploy"
+    "deploy-dev": "serverless deploy --stage dev",
+    "deploy-prod": "serverless deploy --stage prod"
   },
   "devDependencies": {
     "serverless-dynamodb-local": "^0.2.40",
