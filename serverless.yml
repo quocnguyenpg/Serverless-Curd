@@ -2,11 +2,25 @@ org: quoc2110
 app: curd-serveless
 service: books
 
-frameworkVersion: '3'
-
 provider:
   name: aws
   runtime: nodejs14.x
+  region: us-east-1
+  environment:
+    VERSIONS: ${param:VERSIONS, '1'}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: '*'
 
 functions:
   hello:
