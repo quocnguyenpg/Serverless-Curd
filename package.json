@@ -12,10 +12,19 @@
   "pre-commit": [
     "lint"
   ],
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.100",
+    "aws-lambda": "^1.0.7",
+    "dotenv": "^16.0.1",
+    "dynamoose": "^2.8.5",
+    "joi": "^17.6.0",
+    "uuid": "^8.3.2"
+  },
   "devDependencies": {
     "serverless-dynamodb-local": "^0.2.40",
     "serverless-offline": "^8.8.0",
     "serverless-plugin-typescript": "^2.1.2",
+    "ts-node": "^10.8.1",
     "tslint": "^6.1.3",
     "tslint-config-airbnb": "^5.11.2",
     "typescript": "^4.7.3"

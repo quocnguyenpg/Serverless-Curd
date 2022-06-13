@@ -23,8 +23,36 @@ provider:
           Resource: '*'
 
 functions:
-  hello:
-    handler: handler.hello
+  create:
+    handler: src/handler.create
+    events:
+      - http:
+          path: books
+          method: post
+  update:
+    handler: src/handler.update
+    events:
+      - http:
+          path: books/{id}
+          method: put
+  find:
+    handler: src/handler.find
+    events:
+      - http:
+          path: books
+          method: get
+  findOne:
+    handler: src/handler.findOne
+    events:
+      - http:
+          path: books/{id}
+          method: get
+  deleteOne:
+    handler: src/handler.deleteOne
+    events:
+      - http:
+          path: books/{id}
+          method: delete
 
 plugins:
   - serverless-plugin-typescript 

@@ -4,7 +4,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "preserveConstEnums": true,
-    "strictNullChecks": true,
     "module": "commonjs",
     "sourceMap": true,
     "target": "es6",
