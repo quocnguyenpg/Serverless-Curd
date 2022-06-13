@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
+import { IBookQuery, ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
 export default class BookValidator {
   public vCreate = async (input: ICreateBookInput): Promise<ICreateBookInput> => {
     const schema = joi.object({
@@ -19,6 +19,16 @@ export default class BookValidator {
       origin: joi.string(),
     });
     return schema.validateAsync(input);
+  }
+
+  public vQuery = async (query: IBookQuery): Promise<IBookQuery> => {
+    const schema = joi.object().keys({
+      name: joi.string(),
+      description: joi.string(),
+      author: joi.string(),
+      origin: joi.string(),
+    });
+    return schema.validateAsync(query);
   }
 
 }

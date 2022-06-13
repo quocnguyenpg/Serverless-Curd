@@ -1,5 +1,5 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { IBookQuery, ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
 import BookService from '../services/BookService';
 import BookValidator from '../validators/BookValidator';
 
@@ -17,7 +17,7 @@ export default class BookController extends BaseController {
   /**
    * create new book
    */
-  public async create(event: APIGatewayProxyEvent) {
+  public async create(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
       const body = JSON.parse(event.body);
       const createInput = await this.bookValidator.vCreate(body) as ICreateBookInput;
@@ -31,7 +31,7 @@ export default class BookController extends BaseController {
   /**
    * update a book by id
    */
-  public async update(event: APIGatewayProxyEvent) {
+  public async update(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
       const { id } = event.pathParameters;
       const body = JSON.parse(event.body);
@@ -46,9 +46,12 @@ export default class BookController extends BaseController {
   /**
    * Find list book
    */
-  public async find(event: APIGatewayProxyEvent) {
+  public async find(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
-      const result = await this.bookService.findAll();
+      const query = event.queryStringParameters || undefined;
+      console.log('query', query);
+      const conditions = await this.bookValidator.vQuery(query) as IBookQuery;
+      const result = await this.bookService.findAll(conditions);
       return this.responseSuccess(result);
     } catch (error) {
       return this.responseError(error.message);
@@ -58,7 +61,7 @@ export default class BookController extends BaseController {
   /**
    * Get a book by id
    */
-  public async findOne(event: APIGatewayProxyEvent) {
+  public async findOne(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
       const { id } = event.pathParameters;
       const result = await this.bookService.findOne(id);
@@ -71,7 +74,7 @@ export default class BookController extends BaseController {
   /**
    * Delete a book by id
    */
-  public async deleteOne(event: APIGatewayProxyEvent) {
+  public async deleteOne(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
       const { id } = event.pathParameters;
       const result = await this.bookService.delete(id);
