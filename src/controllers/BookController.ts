@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
+import { IBookQuery, ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
 import BookService from '../services/BookService';
 import BookValidator from '../validators/BookValidator';
 
@@ -48,7 +48,10 @@ export default class BookController extends BaseController {
    */
   public async find(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
     try {
-      const result = await this.bookService.findAll();
+      const query = event.queryStringParameters || undefined;
+      console.log('query', query);
+      const conditions = await this.bookValidator.vQuery(query) as IBookQuery;
+      const result = await this.bookService.findAll(conditions);
       return this.responseSuccess(result);
     } catch (error) {
       return this.responseError(error.message);

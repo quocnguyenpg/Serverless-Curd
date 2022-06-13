@@ -21,3 +21,10 @@ export interface IUpdateBookInput {
   author?: string;
   origin?: string;
 }
+
+export interface IBookQuery {
+  name?: string;
+  description?: string;
+  author?: string;
+  origin?: string;
+}

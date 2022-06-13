@@ -4,7 +4,7 @@ import { ScanResponse } from 'dynamoose/dist/DocumentRetriever';
 import { Model } from 'dynamoose/dist/Model';
 import { Schema } from 'dynamoose/dist/Schema';
 import { v4 as uuid } from 'uuid';
-import IBook, { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
+import { IBookQuery, ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
 
 export default class BookService {
   bookModel: Model;
@@ -39,19 +39,21 @@ export default class BookService {
   public update = async (id: string, input: IUpdateBookInput): Promise<AnyDocument> => {
     const book = await this.findOne(id);
     if (!book) throw new Error('This book does not exist');
-    const newInput = {
-      id,
-      ...input,
-    };
-    return this.bookModel.update(newInput);
+    return this.bookModel.update({"id": id}, input, {"returnValues": "ALL_NEW"});
   }
 
   public findOne = async (id: string): Promise<AnyDocument> => {
     return this.bookModel.get(id);
   }
 
-  public findAll = async (): Promise<ScanResponse<AnyDocument>> => {
-    return this.bookModel.scan().exec();
+  public findAll = async (query: IBookQuery): Promise<ScanResponse<AnyDocument>> => {
+    let condition = new dynamoose.Condition();
+    if(query) {
+      for (const [key, value] of Object.entries(query)) {
+        condition = condition.where(key).contains(value);
+      }
+    }
+    return this.bookModel.scan(condition).exec();
   }
 
   public delete = async (id: string): Promise<void> => {
