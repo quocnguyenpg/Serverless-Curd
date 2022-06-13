@@ -1,8 +1,10 @@
 import dynamoose from 'dynamoose';
+import { AnyDocument } from 'dynamoose/dist/Document';
+import { ScanResponse } from 'dynamoose/dist/DocumentRetriever';
 import { Model } from 'dynamoose/dist/Model';
 import { Schema } from 'dynamoose/dist/Schema';
 import { v4 as uuid } from 'uuid';
-import { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
+import IBook, { ICreateBookInput, IUpdateBookInput } from '../interfaces/IBook';
 
 export default class BookService {
   bookModel: Model;
@@ -11,7 +13,7 @@ export default class BookService {
     this.bookModel = this.generateBookModel();
   }
 
-  private generateBookModel() {
+  private generateBookModel = (): Model => {
     const book = new Schema(
       {
         id: { type: String, hashKey: true, default: uuid() },
@@ -30,11 +32,11 @@ export default class BookService {
     });
   }
 
-  public create = async (input: ICreateBookInput): Promise<any> => {
+  public create = async (input: ICreateBookInput): Promise<AnyDocument> => {
     return this.bookModel.create(input);
   }
 
-  public update = async (id: string, input: IUpdateBookInput): Promise<any> => {
+  public update = async (id: string, input: IUpdateBookInput): Promise<AnyDocument> => {
     const book = await this.findOne(id);
     if (!book) throw new Error('This book does not exist');
     const newInput = {
@@ -44,15 +46,15 @@ export default class BookService {
     return this.bookModel.update(newInput);
   }
 
-  public findOne = async (id: string): Promise<any> => {
+  public findOne = async (id: string): Promise<AnyDocument> => {
     return this.bookModel.get(id);
   }
 
-  public findAll = async (): Promise<any> => {
+  public findAll = async (): Promise<ScanResponse<AnyDocument>> => {
     return this.bookModel.scan().exec();
   }
 
-  public delete = async (id: string): Promise<any> => {
+  public delete = async (id: string): Promise<void> => {
     return this.bookModel.delete(id);
   }
 }
