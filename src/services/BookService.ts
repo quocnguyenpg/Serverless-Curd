@@ -39,7 +39,7 @@ export default class BookService {
   public update = async (id: string, input: IUpdateBookInput): Promise<AnyDocument> => {
     const book = await this.findOne(id);
     if (!book) throw new Error('This book does not exist');
-    return this.bookModel.update({"id": id}, input, {"returnValues": "ALL_NEW"});
+    return this.bookModel.update({ id }, input, { returnValues: 'ALL_NEW' });
   }
 
   public findOne = async (id: string): Promise<AnyDocument> => {
@@ -48,7 +48,7 @@ export default class BookService {
 
   public findAll = async (query: IBookQuery): Promise<ScanResponse<AnyDocument>> => {
     let condition = new dynamoose.Condition();
-    if(query) {
+    if (query) {
       for (const [key, value] of Object.entries(query)) {
         condition = condition.where(key).contains(value);
       }

@@ -1,72 +1,61 @@
-<!--
-title: 'AWS NodeJS Example'
-description: 'This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Serverless Nodejs Rest API with TypeScript And DynamoDb
 
+This is simple REST API example for AWS Lambda By Serverless framwork with TypeScript and DynamoDb.
 
-# Serverless Framework AWS NodeJS Example
+## Use Cases
 
-This template demonstrates how to deploy a NodeJS function running on AWS Lambda using the traditional Serverless Framework. The deployed function does not include any event definitions as well as any kind of persistence (database). For more advanced configurations check out the [examples repo](https://github.com/serverless/examples/) which includes integrations with SQS, DynamoDB or examples of functions that are triggered in `cron`-like manner. For details about configuration of specific `events`, please refer to our [documentation](https://www.serverless.com/framework/docs/providers/aws/events/).
+* Serverless Framework - Lamda
 
-## Usage
+* CRUD
 
-### Deployment
+* Store data in DynamoDB
 
-In order to deploy the example, you need to run the following command:
+* CI/CD and support multi-stage deployments
+
+## Project structure
+
+The project code base is mainly located within the `src` folder. This folder is divided in:
 
 ```
-$ serverless deploy
+src/
+┣ controllers/
+┃ ┗ BaseController.ts                           # Base controller
+┃ ┗ BookController.ts                           # Books lambda controller
+┣ interfaces/
+┃ ┗ IBook.ts                                    # Declare book type and some related query and input
+┃ ┗ IResponse.ts                                # Declare response type
+┣ services/
+┃ ┗ BookService.ts                              # Initial book model and define book lambda services
+┣ validators/
+┃ ┗ BookValidator.ts                            # Validate query, create and update input
+┣ config.ts
+┣ constants.ts
+┣ handler.ts
 ```
+## Deploy
 
-After running deploy, you should see output similar to:
+* Run ```npm install``` to install all the necessary dependencies.
+* Run ```npm run local``` use serverless offline to test locally. 
+* Run ```npm run deploy-dev```  Deploy on AWS to dev stage. 
+* Run ```npm run deploy-prod``` Deploy on AWS to prod stage.
 
-```bash
-Deploying aws-node-project to stage dev (us-east-1)
-
-✔ Service deployed to stack aws-node-project-dev (112s)
-
-functions:
-  hello: aws-node-project-dev-hello (1.5 kB)
-```
-
-### Invocation
-
-After successful deployment, you can invoke the deployed function by using the following command:
-
-```bash
-serverless invoke --function hello
-```
-
-Which should result in response similar to the following:
-
-```json
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": {}\n}"
-}
-```
-
-### Local development
-
-You can invoke your function locally by using the following command:
-
-```bash
-serverless invoke local --function hello
-```
-
-Which should result in response similar to the following:
+## List enpoint
 
 ```
-{
-    "statusCode": 200,
-    "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
-}
+  POST - https://y3j7993xxa.execute-api.us-east-1.amazonaws.com/dev/books
+  PUT - https://y3j7993xxa.execute-api.us-east-1.amazonaws.com/dev/books/{id}
+  GET - https://y3j7993xxa.execute-api.us-east-1.amazonaws.com/dev/books
+  GET - https://y3j7993xxa.execute-api.us-east-1.amazonaws.com/dev/books/{id}
+  DELETE - https://y3j7993xxa.execute-api.us-east-1.amazonaws.com/dev/books/{id}
 ```
+
+## CI/CD & multi-stage deployments
+
+* Created 2 environments: `dev` and `prod`
+![alt text](https://github.com/quocnguyenpg/Serverless-Curd/blob/dev/image/stages.jpg)
+
+* Auto deploy When push to `dev` or `prod` branch:
+![alt text](https://github.com/quocnguyenpg/Serverless-Curd/blob/dev/image/deploy_log.jpg)
+
+* Preview `prod` branch from pull requests
+![alt text](https://github.com/quocnguyenpg/Serverless-Curd/blob/dev/image/pull-request.jpg)
